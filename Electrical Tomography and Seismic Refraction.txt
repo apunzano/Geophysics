@@ -1,0 +1,305 @@
+\documentclass[10pt, a4paper]{article}
+\usepackage{graphicx}
+\usepackage{pgfplots}
+\pgfplotsset{compat=1.18}
+\usepackage[a4paper,top=1.25cm,bottom=2cm,left=2.2cm,right=2.2cm,marginparwidth=1.5cm]{geometry}
+% graphs:
+\usepackage{subcaption}
+\usepackage{graphicx}
+\usepackage{float}
+% Berta's packages:
+\usepackage{titlesec}
+\usepackage{comment}
+\usepackage[utf8]{inputenc} 
+\usepackage[T1]{fontenc}    % Font encoding
+\usepackage[english]{babel} % Document language
+\usepackage{multicol}
+% --- Mathematics ---
+\usepackage{amsmath}  % Improvements for mathematical formulas
+\usepackage{amssymb}  % Additional mathematical symbols
+\usepackage{amsthm}   % Environments for theorems and proofs
+\usepackage{listings}
+\usepackage[dvipsnames]{xcolor} % In case you want to add colors later
+\usepackage{makecell}
+% --- Authors and Affiliations ---
+\usepackage{authblk} % Ideal for managing multiple authors from different institutions
+\renewcommand\Authsep{, }
+\renewcommand\Authand{ and }
+\renewcommand\Authands{ and }
+% --- Links and References ---
+\usepackage{hyperref} % Makes references and URLs clickable
+\hypersetup{
+    colorlinks=true,
+    linkcolor=blue,
+    filecolor=magenta,      
+    urlcolor=cyan,
+    citecolor=blue,}
+
+
+\title{Practical Report:\\ Electrical Tomography and Seismic Refraction}
+\author[1]{Berta Gil}
+\author[1]{Ariadna Punzano}
+\affil[1]{University of Barcelona. Barcelona, Spain}
+\date{Academic Year 2026-2027}
+
+\begin{document}
+
+\maketitle
+\begin{multicols}{2}
+\section{Introduction}
+When the properties of the subsurface in a given area need to be determined, deep borehole excavation is not usually employed. Although boreholes allow the rock layers to be identified with certainty, their high economic cost, combined with the fact that they only allow a single point of the entire area to be studied, makes them a very unfeasible technique for a comprehensive analysis. 
+
+
+In geophysics, alternative techniques are therefore used to obtain the necessary information. Geophysical exploration is understood as the set of mathematical and physical methods through which the properties of the subsurface can be inferred from the surface. Based on the measurements obtained, and with the help of appropriate physical models, the properties of the terrain can be described and a model can be constructed. 
+
+
+When the results are combined along a profile to produce a model of a two-dimensional section of the subsurface, this is referred to as tomography. In this practical session, two tomographies have been carried out on the same ground: seismic refraction tomography and electrical resistivity tomography. The principles of both methods have been analysed, and the results obtained have been compared to determine whether they differ or whether there are correlations between the properties they describe along the studied profile. 
+
+\subsection{Principles of Seismic Refraction Tomography (SRT)}
+Seismic Refraction Tomography (\textit{Seismic Refraction Tomography}, SRT) is a geophysical method based on the study of the propagation of seismic waves (elastic waves) through the subsurface. These waves can be generated naturally (as in an earthquake) or, as is usually the case in geophysical exploration, in a controlled and artificial manner (hammer blows on a plate or an explosive charge). 
+
+
+The ultimate objective of seismic refraction tomography is to obtain a model describing the propagation velocity of waves in the two-dimensional section under study. This is achieved by recording the arrival times of the wave disturbance at different points along the profile. However, it is important to note that elastic waves consist of both P-waves (longitudinal) and S-waves (transverse). The corresponding wave equation for each is shown below: \\ \newline
+\textbf{P-waves:}
+\begin{align}
+\frac{1}{\alpha^2}\frac{\partial^2(\nabla\cdot \vec{u})}{\partial t^2}
+&= \nabla^2(\nabla\cdot \vec{u}),
+\quad \alpha = \sqrt{\frac{\lambda + 2\mu}{\rho}}
+\end{align}
+
+\textbf{S-waves:}
+\begin{align}
+\frac{1}{\beta^2}\frac{\partial^2(\nabla\times \vec{u})}{\partial t^2}
+&= \nabla^2(\nabla\times \vec{u}),
+\quad \beta = \sqrt{\frac{\mu}{\rho}}
+\end{align}
+
+\noindent As can be observed, they have different propagation velocities. This means that different arrival times exist for different waves within the same record. To avoid mixing data, only the first arrival is studied in refraction tomography, corresponding to the P-waves.
+
+
+To understand how these arrival times are related to the propagation velocity of the subsurface, it is essential to start with a physical model (a prediction or hypothesis of how the terrain should be parameterised). Seismic refraction assumes that the medium can be divided into layers/regions that can be considered homogeneous, and that reflections and refractions of waves occur at their boundaries, as the name of the technique suggests. These reflections and refractions of elastic waves behave analogously to light in geometrical optics. In other words, Snell's law is satisfied at the boundary between two media:
+\begin{align}
+\frac{\sin\theta_i}{\sin\theta_r} = \frac{v_1}{v_2}
+\end{align}
+Where $v_1$ is the velocity of the first medium, $v_2$ that of the second, $\theta_i$ the angle of incidence with respect to the normal to the boundary between regions, and $\theta_r$ the angle of refraction (also with respect to the normal).
+
+
+In this practical session, advanced inversion software was available, allowing the relationship between propagation velocities and arrival times to be solved for a highly discretised medium: a mesh that divides the section into multiple cells with variable velocities in both the vertical and horizontal directions\footnote{Number of parameters $m$ greater than the number of experimental data points $n$: underdetermined inverse problem.}). Nevertheless, it is worth discussing the simplest case: a medium stratified into layers with velocity increasing with depth, which may be a reasonable approximation when each layer corresponds to a distinct stratum.
+
+\begin{figure}[H]
+    \centering
+    \begin{subfigure}[t]{0.3\textwidth}
+        \centering
+        \includegraphics[width=\linewidth]{refraccio_critica.png}
+    \end{subfigure}
+     \hspace{9pt}
+    \begin{subfigure}[t]{0.37\textwidth}
+        \centering
+        \includegraphics[width=\linewidth]{v1_v2.png}
+    \end{subfigure}
+
+    \caption{From top to bottom: (a) schematic representation of wave propagation through a two-layer medium with $v_1<v_2$, together with its corresponding first-arrival time graph as a function of distance from the source (travel-time curve). The effects of critical refraction (\textit{head wave refraction slope}) can be observed. (b) Inverse case ($v_2 < v_1$), where the ray is refracted towards the normal and no critical refraction towards the surface occurs. The slope of the travel-time curve would be constant and equal to that of the direct wave.}
+    \label{fig:refraccio_critica}
+\end{figure}
+When the propagation velocity in the deepest layer is greater than that of the surface layer, the angle of refraction must always be greater than the angle of incidence. Consequently, beyond a certain angle of incidence (the critical angle), what is known as critical refraction occurs. The wave travels along the interface between the media at the velocity of the deeper layer and generates a head wave that returns towards the surface, as shown in image (a) of Figure~\ref{fig:refraccio_critica}. If there are additional layers, the slope of the travel-time curve would decrease each time the wave undergoes critical refraction in one of the layers. If there is a velocity inversion, it would be invisible.
+
+
+
+
+
+
+
+
+\subsection{Procedure for Performing Electrical Tomography (ERT)}
+
+Electrical Resistivity Tomography (ERT) is a geophysical method that makes it possible to determine the distribution of electrical resistivity in the subsurface. This property depends on factors such as material composition, temperature and, especially, the presence and connectivity of fluids such as water.
+
+The survey begins with the installation of a series of electrodes on the ground surface, connected to a resistivity meter. During each measurement, two electrodes (A and B) inject an electric current of known intensity \(I\), while the other two (M and N) measure the potential difference \(\Delta V\). The physical principle underlying the method is Ohm's law:
+
+\begin{align}
+R=\frac{\Delta V}{I}
+\end{align}
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.465\textwidth]{dipolo.png}
+    \caption{Dipole-dipole resistivity profile for a two-dimensional measurement.}
+    \label{fig:cap_fase} 
+\end{figure}
+
+In a homogeneous medium, the apparent resistivity is calculated using:
+
+\begin{align}
+\rho_a=K\frac{\Delta V}{I}
+\end{align}
+
+where \(K\) is the geometric factor, which depends on the arrangement of the electrodes.
+
+In the case of the Schlumberger array, the electrodes are arranged symmetrically, with a distance between M and N that is much smaller than the distance between \(C_1\) and \(C_2\). By modifying the electrode spacing, measurements are obtained that provide information about different depths of the subsurface. In general, a greater spacing implies a greater investigation depth.
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.475\textwidth]{Ws.png}
+    \caption{Wenner-Schlumberger resistivity profile for a two-dimensional measurement.}
+    \label{fig:cap_fase}
+\end{figure}
+
+Once the field measurements have been completed, the data are organised into an apparent resistivity pseudosection. This representation makes it possible to visualise resistivity variations along the profile, but it does not directly correspond to the actual distribution of resistivities at depth.
+
+To obtain a model of the subsurface, a numerical inversion process must be applied. Initially, a resistivity model is proposed and its response is calculated using the forward problem. Based on Laplace's equation:
+
+\begin{align}
+\nabla\cdot \vec{j} = \frac{1}{\rho}\nabla^2 V = 0
+\end{align}
+
+where \(V\) is the electric potential and \(\vec{j}\) is the current density.
+
+In a non-homogeneous medium, the electric potential satisfies Poisson's equation.
+
+The calculated response is compared with the experimental data, and the model is modified iteratively until the error between the two is minimised. This process can be expressed as:
+
+\begin{align}
+\min_{\mathbf{m}}
+\left\|
+\mathbf{d}_{obs}-\mathbf{d}_{calc}(\mathbf{m})
+\right\|^2
+\end{align}
+
+where \(\mathbf{m}\) represents the resistivity model, \(\mathbf{d}_{obs}\) the observed data and \(\mathbf{d}_{calc}\) the calculated data.
+
+Finally, a two-dimensional section of electrical resistivity is obtained, allowing contrasts and anomalies associated with different materials and geological structures to be identified. Electrical tomography is used, for example, in fault characterisation and the study of geothermal areas, among other applications.
+
+\section{Experimental Description}
+The experimental data were obtained in two gardens belonging to the Faculty of Earth Sciences\footnote{Coordinates ($41.38^\circ\mathrm N$, $2.12^\circ\mathrm E$).} on two different days. The first group (23 October) carried out the seismic survey in the first garden and the electrical survey in the second, while the second group (30 November) reversed the order. Finally, the data corresponding to the second site were used, as they presented less noise and, since they corresponded to the same plot of land, allowed the results of both tomographies to be compared directly.
+
+
+\subsection{SRT Setup and Procedure}
+
+In this practical session, a profile extending 24 metres and oriented in the North-South direction (parallel to the meridian) was studied. With this length, it would be expected that information could be obtained down to a depth of approximately 4 metres.
+
+
+Geophones were used to record the measurements. These devices convert ground movement into a voltage signal that can be recorded at a station (a laptop computer running the corresponding software). There are vertical and horizontal geophones, depending on the direction of movement they detect. To record P-waves (first arrivals), vertical geophones with a natural frequency of $10\;\mathrm{Hz}$ were used. During installation, care must be taken to ensure that the geophones are properly aligned and correctly inserted into the ground (vertically and at sufficient depth). It is also essential that they are placed in the correct order with respect to the cabling system connecting them to the station. Otherwise, the software will incorrectly record the relative positions of the geophones.
+
+
+
+The seismic source consisted of a hammer with a mass of $m = 5\; \mathrm{kg}$ striking a metal plate. Both elements were connected to the station by cable, closing a circuit that made it possible to mark the initial instant of the shot ($t = 0$) and thus measure the time elapsed until the signal reached each geophone.
+
+\begin{table}[H]
+    \centering
+    \begin{tabular}{|l|c|}
+        \hline
+        \textbf{Parameter} & \textbf{Value}  \\
+        \hline
+        Geophone natural frequency & $10\text{ Hz}$\\
+        \hline
+        Sampling interval ($\Delta t$) & $1/8\text{ ms}$ ($0.125\text{ ms}$) \\
+        \hline
+        Recording length ($\Delta T$) & $128\text{ ms}$ \\
+        \hline
+        Spacing between geophones & $1\text{ m}$ \\
+        \hline
+        Spacing between shot points & $3\text{ m}$ (between geophones) \\
+        \hline
+    \end{tabular}
+    \caption{Acquisition parameters and profile geometry.}
+    \label{tab:parametres_srt}
+\end{table}
+
+A total of 24 equally spaced geophones ($d = 1\;\mathrm m$) were placed along the profile under study, taking the northern end as the coordinate origin ($x = 0$) and positioning the last geophone towards the South. A signal was generated and a travel-time curve was recorded for several shots, every $3$ m, as indicated in Table~\ref{tab:parametres_srt}. Having more shots along the profile provides more experimental data, allowing the model fit to be better constrained (especially in an underdetermined problem such as ours).
+
+
+\subsection{\fontsize{11.47pt}{13.5pt}\selectfont ERT Setup and Procedure}
+
+To carry out the electrical resistivity tomography (ERT), 36 electrodes are placed on the ground, with a spacing of 1 m between consecutive electrodes. Using the electrical resistivity and induced polarisation survey equipment, measurements are taken using the W-S and D-D configurations, as described in section \textbf{1.2}.
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.695\linewidth]{camp.png}
+    \caption{Arrangement of the electrodes in the Biology garden, represented by the red line; the numbering direction is reversed with respect to the coordinate system used in seismic tomography.}
+    \label{fig:disposicio_electrodes_ERT}
+\end{figure}
+
+Regarding the location of the electrodes, they follow the direction and orientation indicated in the figure. The first electrode corresponds to the position identified with number 1. This arrangement means that \textbf{the direction of the coordinate origin is reversed} with respect to the system used in the data obtained through seismic tomography. For this reason, \textbf{the order of the data must be reversed} in the electrical tomography so that they spatially match the seismic data.
+
+
+
+
+\section{Data Inversion and Results}
+\subsection{SRT Inversion}
+For processing the records and obtaining the travel-time curves, \texttt{PyCKSTER} was used, an open-source application with a graphical interface (based on Python) designed for the analysis of shallow seismic data.
+
+The first step in processing the experimental data and obtaining a physical model of the ground is to perform the \textit{picking}. Picking is the process by which the time instants at which the first arrival occurs at each geophone are identified and manually marked. The records obtained show the different signals detected by the geophone from the instant of the shot until a time interval of $\Delta T = 128 \; \mathrm{ms}$ has elapsed, as defined by us. 
+
+
+\texttt{PyCKSTER} allows picking to be performed by $"$clicking$"$ on the records. However, when selecting these first arrivals, it is necessary to consider whether the signal captured by each geophone is good or not. Noise is usually present, contaminating the records as a result of instrumentation defects and/or the presence of objects in the surrounding area that cause unwanted signals. If the first arrival cannot be clearly distinguished, it is better not to mark that data point in the record before performing the inversion.
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=\linewidth]{picking.png}
+    \caption{Screenshot of the \texttt{PyCKSTER} interface. Picking (red crosses) is being performed on the record with the source at $x = 6.5\;\mathrm{m}$ from the first geophone. The lower panel displays the resulting travel-time curve.}
+    \label{fig:picking}
+\end{figure}
+
+Once the picking has been completed and saved, with the shot positions properly defined, the \texttt{Traveltime inversion module} is opened. A tab then appears with all the inversion parameter settings. In our case, a triangular mesh with 7 secondary nodes and a maximum of 15 iterations of the inversion program was selected. 
+
+\begin{figure}[H]
+    \centering
+    \begin{subfigure}[t]{0.50\textwidth}
+        \centering
+        \includegraphics[width=\linewidth]{traveltime-curves.png}
+    \end{subfigure}
+     \hspace{9pt}
+    \begin{subfigure}[t]{0.5\textwidth}
+        \centering
+        \includegraphics[width=\linewidth]{traveltime-histograma.png}
+    \end{subfigure}
+
+    \caption{From top to bottom: (a) Travel-time curves for each record (solid line) and fit obtained through regression (dashed line). An Rrms of 7.7182 was obtained. (b) Histogram of the arrival-time differences (residuals between observed and modelled times) obtained in the SRT inversion. The main statistical averages are also shown.}  
+    \label{fig:inversio_SRT}
+\end{figure}
+
+\subsection{ERT Inversion (ResIPy)}
+
+The field data are used to calculate the apparent resistance.
+These data are imported into ResIPy, where outliers are filtered and noise is estimated using a linear error model applied to the apparent resistance.
+
+The subsurface is discretised into a triangular finite-element mesh, and Poisson's equation is solved to calculate the electrical response of the model.
+The process is iterative and stops when the convergence criteria are met, with the quality of the fit being monitored through the RMS error.
+
+\subsection{Comparison of the Final Models}
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=\linewidth]{elevacio-distacia-modelat-velocity2 (1).png}
+    \caption{2D SRT inversion profile of propagation velocities. It can be observed that, at depths greater than $2\; \mathrm m$, the medium at $x = 0\; \mathrm{m}$ (North) has associated slower propagation velocities, whereas at $x \in (10,20)\;\mathrm m$ the velocities are faster. A domain of very slow propagation velocities can also be observed at the surface.}
+    \label{fig:SRT_model} 
+\end{figure}
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.95\linewidth]{DipolDipol_graf.png}
+    \caption{2D ERT inversion section using the Dipole-Dipole array.}
+    \label{fig:cap_fase}
+\end{figure}
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.95\linewidth]{WS_graf.png}
+    \caption{2D ERT inversion section using the Wenner-Schlumberger array.}
+    \label{fig:cap_fase} 
+\end{figure}
+
+The Wenner-Schlumberger array provides a much stronger and more stable signal (less noise), making it ideal for detecting horizontal changes and surface layers with high precision. The Dipole-Dipole array, on the other hand, has a weaker and noisier signal, but offers higher lateral resolution and greater investigation depth, making it better suited to detecting vertical structures or complex bodies.
+
+\section{Conclusion}
+\begin{itemize}
+    \item \textbf{SRT:} The two-dimensional velocity profile indicates the presence of low propagation velocity zones at the surface: $v \in (300,400)\;\mathrm{m/s}$. This is consistent with the simplest theoretical models (two-layer stratification). \\
+    At intermediate depth, $h \sim -4\;\mathrm{m}$, the results show an inhomogeneity in the propagation velocity values: on the northern side, ($x = 0\;\mathrm{m}$), the propagation velocity is lower ($v\sim 380\;\mathrm{m/s}$). This can be attributed to a difference in the density and composition of the subsurface. \\
+    The experimental setup used in this practical session is suitable for obtaining information down to a maximum depth of between $4$ and $5$ metres. At greater depths, it cannot be guaranteed that the model predictions are accurate. Therefore, the numerical results mapped in Figure~\ref{fig:SRT_model} at depths greater than $-6\;\mathrm{m}$ should be disregarded.
+    \item \textbf{ERT}: Based on the inversion sections (Figures 8 and 9), three anomalies can be observed: one of low resistivity ($\approx 10\ \Omega\cdot\text{m}$) between 20 and 25 metres from the origin point, which could correspond to saturated clays/silts or water pipes; another at the origin with high resistivity ($\approx 150\ \Omega\cdot\text{m}$), which is probably due to concrete or foundations. Wenner-Schlumberger stands out for its strong and stable signal, making it suitable for surface layers and horizontal variations; Dipole-Dipole, which is noisier and weaker, offers greater lateral resolution and investigation depth.
+
+\end{itemize}
+By comparing the anomalies observed in each of the two models, an overlap can be observed between the regions of high conductivity and those with high propagation velocity. Similarly, the areas of higher resistivity coincide with areas of low propagation velocity. It is therefore possible that a correlation exists between both properties of the medium.
+
+\end{multicols}
+
+\end{document}
