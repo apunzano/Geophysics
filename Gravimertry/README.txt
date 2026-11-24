@@ -8,7 +8,7 @@ In seismic refraction surveys, waves travel through the subsurface via different
 
 - Direct waves: Travel along the surface.
 - Reflected waves: Bounce off deeper interfaces.
-- Refracted waves: Travel along deeper, faster layers and return to the surface.
+- Refracted waves: Travel along deeper, faster layers and return to the surface (Not studied in the code).
 
 These paths have different lengths and velocities, so they arrive at geophones at different times, producing a travel-time curve with distinct regimes (slopes) that reveal subsurface structure.
 
